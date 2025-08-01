@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florence - Guide de Voyage 5 Jours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .day-section {
+            margin-bottom: 40px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .day-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .day-title {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .activities {
+            padding: 20px;
+        }
+
+        .activity {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4facfe;
+            transition: all 0.3s ease;
+        }
+
+        .activity:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+
+        .activity.visited {
+            background: linear-gradient(135deg, #a8e6cf, #88d8a3);
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .activity-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .activity.visited .activity-name {
+            color: #1b5e20;
+        }
+
+        .price-tag {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .free {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .paid {
+            background: #fff3e0;
+            color: #f57c00;
+            border: 1px solid #ff9800;
+        }
+
+        .description {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .activity.visited .description {
+            color: #2e7d32;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .link-btn {
+            background: linear-gradient(135degree, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .visit-btn {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .visit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .visit-btn.visited {
+            background: linear-gradient(135deg, #ff5722, #f4511e);
+        }
+
+        .notes-area {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .excursions-section {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .excursions-title {
+            color: #2d3436;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .excursion {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .excursion:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+        }
+
+        .tips-section {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .tips-title {
+            color: #2d3436;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tip {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #e17055;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .activity-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .notes-area {
+                min-width: 100%;
+            }
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 118, 117, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ Florence - Guide 5 Jours</h1>
+            <p>Programme détaillé avec marche jusqu'à 15 km/jour</p>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <h3>Statistiques de votre voyage</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" id="visited-count">0</span>
+                        <span>Visités</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-count">0</span>
+                        <span>Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="progress">0%</span>
+                        <span>Progression</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-title">Jour 1 – Le centre historique (~10 km)</div>
+                <div class="activities">
+                    <div class="activity" data-activity="duomo">
+                        <div class="activity-header">
+                            <div class="activity-name">Piazza del Duomo & Cathédrale</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Promenade sur la magnifique Piazza del Duomo, découverte de la cathédrale, du baptistère et de la façade impressionnante.
+                        </div>
+                        <div class="links">
+                            <a href="https://bons-plans-florence.com/activites-gratuites/" class="link-btn" target="_blank">🔗 Bons Plans Florence</a>
+                            <a href="https://bonjourflorence.fr/activites-gratuites/" class="link-btn" target="_blank">🔗 Bonjour Florence</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="ponte-vecchio">
+                        <div class="activity-header">
+                            <div class="activity-name">Ponte Vecchio & Places historiques</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Visite du célèbre Ponte Vecchio, Piazza della Repubblica, Piazza della Signoria avec la Loggia dei Lanzi (musée en plein air).
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="giotto-tower">
+                        <div class="activity-header">
+                            <div class="activity-name">Clocher de Giotto & Complexe du Duomo</div>
+                            <div class="price-tag paid">~18 €</div>
+                        </div>
+                        <div class="description">
+                            Montée du clocher de Giotto et visite du complexe du Duomo pour une vue panoramique sur Florence.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.visititaly.eu" class="link-btn" target="_blank">🎫 Site officiel Duomo</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="palazzo-vecchio">
+                        <div class="activity-header">
+                            <div class="activity-name">Palazzo Vecchio & Tour Arnolfo</div>
+                            <div class="price-tag paid">~20 €</div>
+                        </div>
+                        <div class="description">
+                            Visite du Palazzo Vecchio et montée de la Tour Arnolfo pour découvrir l'histoire politique de Florence.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-title">Jour 2 – Grands musées Renaissance (~8 km)</div>
+                <div class="activities">
+                    <div class="activity" data-activity="uffizi">
+                        <div class="activity-header">
+                            <div class="activity-name">Galerie des Offices (Uffizi)</div>
+                            <div class="price-tag paid">~25 € + 4 € frais</div>
+                        </div>
+                        <div class="description">
+                            Chef-d'œuvre de la Renaissance : Botticelli, Léonard de Vinci, Michel-Ange. Réservation obligatoire.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.b-ticket.com/b-ticket/uffizi/" class="link-btn" target="_blank">🎫 Réservation B-ticket</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="accademia">
+                        <div class="activity-header">
+                            <div class="activity-name">Galerie de l'Académie (Accademia)</div>
+                            <div class="price-tag paid">~16-20 €</div>
+                        </div>
+                        <div class="description">
+                            Le David de Michel-Ange et autres sculptures. Réservation prioritaire recommandée.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.b-ticket.com/b-ticket/accademia/" class="link-btn" target="_blank">🎫 Réservation B-ticket</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="san-marco">
+                        <div class="activity-header">
+                            <div class="activity-name">Piazza San Marco & Loggia dei Lanzi</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Balade autour de la place San Marco et découverte de la Loggia dei Lanzi si pas encore visitée.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-title">Jour 3 – Jardins et palais (~10 km)</div>
+                <div class="activities">
+                    <div class="activity" data-activity="passe-partout">
+                        <div class="activity-header">
+                            <div class="activity-name">PassePartout 5 Jours</div>
+                            <div class="price-tag paid">~40-58 €</div>
+                        </div>
+                        <div class="description">
+                            Pass combiné pour Uffizi, Pitti Palace & Boboli. Valable 5 jours après activation.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.b-ticket.com/b-ticket/uffizi/" class="link-btn" target="_blank">🎫 Billet combiné</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="boboli-pitti">
+                        <div class="activity-header">
+                            <div class="activity-name">Jardins de Boboli & Palazzo Pitti</div>
+                            <div class="price-tag paid">~22 € ou inclus pass</div>
+                        </div>
+                        <div class="description">
+                            Magnifiques jardins à l'italienne et palais Renaissance avec collections d'art.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="piazzale-michelangelo">
+                        <div class="activity-header">
+                            <div class="activity-name">Piazzale Michelangelo & Jardin des Roses</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Panorama gratuit au coucher du soleil et visite du magnifique jardin des roses.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.visitflorence.com/itineraries-in-florence/florence-for-free.html" class="link-btn" target="_blank">🔗 Visit Florence</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-title">Jour 4 – Art religieux et sculptures (~9 km)</div>
+                <div class="activities">
+                    <div class="activity" data-activity="bargello">
+                        <div class="activity-header">
+                            <div class="activity-name">Museo Nazionale del Bargello</div>
+                            <div class="price-tag paid">~10 € + combo ~8 €</div>
+                        </div>
+                        <div class="description">
+                            Sculptures Renaissance de Donatello, Cellini et combo avec Orsanmichele.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="museo-san-marco">
+                        <div class="activity-header">
+                            <div class="activity-name">Museo San Marco</div>
+                            <div class="price-tag paid">~8 €</div>
+                        </div>
+                        <div class="description">
+                            Fresques exceptionnelles de Fra Angelico dans l'ancien couvent dominicain.
+                        </div>
+                        <div class="links">
+                            <a href="https://www.b-ticket.com/b-ticket/" class="link-btn" target="_blank">🎫 B-ticket</a>
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="churches">
+                        <div class="activity-header">
+                            <div class="activity-name">Églises historiques</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Santa Maria Novella, Santo Spirito, Ognissanti, et réfectoire de Sant'Apollonia avec "La Cène" de Castagno.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-title">Jour 5 – Découverte alternative & détente (~8 km)</div>
+                <div class="activities">
+                    <div class="activity" data-activity="corridor-vasari">
+                        <div class="activity-header">
+                            <div class="activity-name">Corridor Vasari</div>
+                            <div class="price-tag paid">~43 € billet combiné</div>
+                        </div>
+                        <div class="description">
+                            Passage secret entre les Offices et le Palais Pitti, si inclus dans votre billet.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="giardino-rose-cemetery">
+                        <div class="activity-header">
+                            <div class="activity-name">Giardino delle Rose & Cimetière San Miniato</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Balade paisible dans le jardin des roses et découverte du cimetière historique de San Miniato.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity" data-activity="santissima-annunziata">
+                        <div class="activity-header">
+                            <div class="activity-name">Piazza Santissima Annunziata</div>
+                            <div class="price-tag free">GRATUIT</div>
+                        </div>
+                        <div class="description">
+                            Découverte de la loggia, statue des Médicis et cloître votif gratuit.
+                        </div>
+                        <div class="controls">
+                            <button class="visit-btn" onclick="toggleVisit(this)">Marquer comme visité</button>
+                            <div class="notes-area">
+                                <textarea class="notes-input" placeholder="Vos notes sur cette visite..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="excursions-section">
+                <h3 class="excursions-title">🚍 Excursions à la journée</h3>
+                
+                <div class="excursion">
+                    <div class="activity-header">
+                        <div class="activity-name">Pise, Sienne & San Gimignano + Chianti</div>
+                        <div class="price-tag paid">~75 €</div>
+                    </div>
+                    <div class="description">
+                        Tour à la journée avec déjeuner & visite guidée des plus belles villes de Toscane.
+                    </div>
+                    <div class="links">
+                        <a href="https://www.tiqets.com/en/florence-attractions-c71854/tickets-for-pisa-siena-san-gimignano-chianti-day-tour-from-florence-p1096159/" class="link-btn" target="_blank">🎫 Tiqets tour combiné</a>
+                    </div>
+                </div>
+
+                <div class="excursion">
+                    <div class="activity-header">
+                        <div class="activity-name">Pise & Lucques (Lucca)</div>
+                        <div class="price-tag paid">~60-90 €</div>
+                    </div>
+                    <div class="description">
+                        9h en petit groupe, visite de la tour du Guinigi & Puccini Museum.
+                    </div>
+                    <div class="links">
+                        <a href="https://theflorenceinsider.com/from-florence-to-lucca/" class="link-btn" target="_blank">🔗 Florence Insider</a>
+                    </div>
+                </div>
+
+                <div class="excursion">
+                    <div class="activity-header">
+                        <div class="activity-name">Cinque Terre</div>
+                        <div class="price-tag paid">~68-75 €</div>
+                    </div>
+                    <div class="description">
+                        Excursion complète aux villages littoraux classés UNESCO au départ de Florence.
+                    </div>
+                    <div class="links">
+                        <a href="https://www.hellotickets.com/italy/florence/day-trips/sc-123-7334" class="link-btn" target="_blank">🎫 Hello Tickets</a>
+                    </div>
+                </div>
+
+                <div class="excursion">
+                    <div class="activity-header">
+                        <div class="activity-name">Chianti / Montepulciano / Montalcino</div>
+                        <div class="price-tag paid">~80-90 €</div>
+                    </div>
+                    <div class="description">
+                        Dégustation de vins Brunello et découverte des villages médiévaux.
+                    </div>
+                    <div class="links">
+                        <a href="https://www.tripindicator.com/florence-activities/1/519/Y.html" class="link-btn" target="_blank">🎫 Trip Indicator</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h3 class="tips-title">✅ Conseils pratiques</h3>
+                
+                <div class="tip">
+                    <strong>Réservations en ligne :</strong> Utilisez uniquement les sites officiels (Uffizi, Accademia, Duomo) via B-ticket ou duomo.firenze.it - ce sont les seuls fiables.
+                </div>
+                
+                <div class="tip">
+                    <strong>Billets datés :</strong> Pour Uffizi, Accademia, Duomo - billets avec horaires fixes à prévoir à l'avance (même hors saison).
+                </div>
+                
+                <div class="tip">
+                    <strong>Premier dimanche du mois :</strong> Entrée gratuite dans les musées d'État (Uffizi, Pitti...), mais très fréquenté - réservation toujours utile.
+                </div>
+                
+                <div class="tip">
+                    <strong>Marche quotidienne :</strong> Préparez de bonnes chaussures pour 8-15 km par jour selon le programme.
+                </div>
+            </div>
+
+            <button class="reset-btn" onclick="resetAll()">🔄 Réinitialiser toutes les visites</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables pour le stockage des données
+        let visitedActivities = new Set();
+        let activityNotes = {};
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateStats();
+        });
+
+        // Fonction pour basculer l'état de visite
+        function toggleVisit(button) {
+            const activity = button.closest('.activity');
+            const activityId = activity.dataset.activity;
+            
+            if (visitedActivities.has(activityId)) {
+                // Marquer comme non visité
+                visitedActivities.delete(activityId);
+                activity.classList.remove('visited');
+                button.textContent = 'Marquer comme visité';
+                button.classList.remove('visited');
+            } else {
+                // Marquer comme visité
+                visitedActivities.add(activityId);
+                activity.classList.add('visited');
+                button.textContent = '✓ Visité - Annuler';
+                button.classList.add('visited');
+            }
+            
+            saveData();
+            updateStats();
+        }
+
+        // Fonction pour sauvegarder les notes
+        function saveNotes() {
+            const activities = document.querySelectorAll('.activity');
+            activities.forEach(activity => {
+                const activityId = activity.dataset.activity;
+                const notesInput = activity.querySelector('.notes-input');
+                if (notesInput) {
+                    activityNotes[activityId] = notesInput.value;
+                }
+            });
+            saveData();
+        }
+
+        // Écouter les changements dans les zones de notes
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('notes-input')) {
+                saveNotes();
+            }
+        });
+
+        // Fonction pour sauvegarder les données
+        function saveData() {
+            const data = {
+                visited: Array.from(visitedActivities),
+                notes: activityNotes
+            };
+            // Utilisation de variables en mémoire au lieu de localStorage
+            window.florenceData = data;
+        }
+
+        // Fonction pour charger les données
+        function loadData() {
+            if (window.florenceData) {
+                const data = window.florenceData;
+                
+                // Charger les activités visitées
+                if (data.visited) {
+                    visitedActivities = new Set(data.visited);
+                    data.visited.forEach(activityId => {
+                        const activity = document.querySelector(`[data-activity="${activityId}"]`);
+                        if (activity) {
+                            activity.classList.add('visited');
+                            const button = activity.querySelector('.visit-btn');
+                            if (button) {
+                                button.textContent = '✓ Visité - Annuler';
+                                button.classList.add('visited');
+                            }
+                        }
+                    });
+                }
+                
+                // Charger les notes
+                if (data.notes) {
+                    activityNotes = data.notes;
+                    Object.entries(data.notes).forEach(([activityId, note]) => {
+                        const activity = document.querySelector(`[data-activity="${activityId}"]`);
+                        if (activity) {
+                            const notesInput = activity.querySelector('.notes-input');
+                            if (notesInput) {
+                                notesInput.value = note;
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // Fonction pour mettre à jour les statistiques
+        function updateStats() {
+            const totalActivities = document.querySelectorAll('.activity').length;
+            const visitedCount = visitedActivities.size;
+            const progressPercent = totalActivities > 0 ? Math.round((visitedCount / totalActivities) * 100) : 0;
+            
+            document.getElementById('visited-count').textContent = visitedCount;
+            document.getElementById('total-count').textContent = totalActivities;
+            document.getElementById('progress').textContent = progressPercent + '%';
+        }
+
+        // Fonction pour réinitialiser toutes les données
+        function resetAll() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes vos visites et notes ?')) {
+                // Réinitialiser les données
+                visitedActivities.clear();
+                activityNotes = {};
+                
+                // Réinitialiser l'interface
+                document.querySelectorAll('.activity').forEach(activity => {
+                    activity.classList.remove('visited');
+                    const button = activity.querySelector('.visit-btn');
+                    if (button) {
+                        button.textContent = 'Marquer comme visité';
+                        button.classList.remove('visited');
+                    }
+                    const notesInput = activity.querySelector('.notes-input');
+                    if (notesInput) {
+                        notesInput.value = '';
+                    }
+                });
+                
+                // Sauvegarder et mettre à jour les stats
+                saveData();
+                updateStats();
+                
+                alert('Toutes les données ont été réinitialisées !');
+            }
+        }
+
+        // Fonction pour exporter les données (bonus)
+        function exportData() {
+            const data = {
+                visited: Array.from(visitedActivities),
+                notes: activityNotes,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'florence-voyage-data.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+
+        // Ajout d'effets visuels
+        document.querySelectorAll('.activity').forEach(activity => {
+            activity.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+            });
+            
+            activity.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('visited')) {
+                    this.style.transform = 'translateX(0)';
+                }
+            });
+        });
+
+        // Animation au scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.day-section, .excursion, .tip');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Lancer l'animation au chargement
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+    </script>
+</body>
+</html>
