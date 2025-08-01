@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Florence Street Food Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    html, body, #map {
+      height: 100%;
+      width: 100vw;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 60vh;
+      min-height: 300px;
+    }
+    .notes-section {
+      padding: 1em;
+      background: #f9f9fa;
+      border-radius: .8em;
+      margin: 1em .2em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .note-item {
+      margin: .7em 0;
+      padding: .5em .7em;
+      border-radius: .6em;
+      background: #e2eddb;
+      border-left: 5px solid #7EA16B;
+      font-size: .96em;
+      display: flex;
+      align-items: flex-start;
+      gap: .6em;
+    }
+    .note-vu { background: #e6e6ee; border-left-color: #6471a8;}
+    .note-nonvu { background: #f6ece7; border-left-color: #c99968;}
+    .note-form {
+      display: flex;
+      flex-direction: column;
+      margin-top: .7em;
+    }
+    .note-form textarea {
+      border-radius: .4em;
+      border: 1px solid #d1d1d1;
+      min-height: 2em;
+      margin-bottom: .5em;
+      padding: .3em .5em;
+      font-size: .96em;
+    }
+    .note-form input[type="checkbox"] {
+      margin-right: .4em;
+    }
+    @media (max-width: 640px) {
+      #map { min-height: 200px; }
+      .notes-section, .note-item, .note-form textarea { font-size:1em;}
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="notes-section" id="notesSection"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Données des spots avec coordonnées, nom et spécialité
+    const spots = [
+      {
+        name: "Piazza del Mercato Nuovo",
+        lat: 43.770560, lon: 11.253400,
+        special: "Lampredotto – semelle imbibée de bouillon, sauce verte/piquante. Très apprécié des locaux.",
+        price: 3.50
+      },
+      {
+        name: "Mercato Centrale (rdc, Via dell'Ariento)",
+        lat: 43.7768, lon: 11.2530,
+        special: "Lampredotto, bollito, pâtes simples. Service rapide, ambiance animée.",
+        price: 3.50
+      },
+      {
+        name: "Piazza de' Cimatori (près Ponte Vecchio)",
+        lat: 43.769300, lon: 11.255800,
+        special: "Lampredotto/trippa, service souvent debout ou dehors, décor traditionnel.",
+        price: 3.80
+      },
+      {
+        name: "Marché de Sant'Ambrogio",
+        lat: 43.774860, lon: 11.266690,
+        special: "Lampredotto & trippa, rapide, authentique, fréquenté par les locaux.",
+        price: 3.00
+      },
+      {
+        name: "Via dei Neri 65R",
+        lat: 43.767180, lon: 11.259350,
+        special: "Paninis XXL variés, salami/stracciatella/légumes, très prisé.",
+        price: "Variable"
+      }
+    ];
+
+    // Palette de marqueurs doux
+    const markerIcons = [
+      new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+      }),
+      new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+      }),
+      new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+      }),
+      new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+      }),
+      new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+      })
+    ];
+
+    // Centrage de la carte
+    const map = L.map('map').setView([43.7718, 11.255], 14);
+
+    // Fond de carte OSM
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Marqueurs et popups
+    spots.forEach((spot, i) => {
+      const m = L.marker([spot.lat, spot.lon], {icon: markerIcons[i % markerIcons.length]}).addTo(map);
+      let priceTxt = '≈ '+spot.price+' €';
+      if (typeof spot.price !== "number") priceTxt = 'Prix : '+spot.price;
+
+      let popupContent = `<strong>${spot.name}</strong><br>${spot.special}<br><em>${priceTxt}</em><br><button onclick="editNote(${i})">J’ai vu / Prendre une note ✏️</button>`;
+      m.bindPopup(popupContent);
+    });
+
+    // Notes stockées en localStorage
+    const notesKey = "florence_food_notes";
+    const userNotes = (JSON.parse(localStorage.getItem(notesKey)) || Array(spots.length).fill(null));
+
+    function saveNotes() {
+      localStorage.setItem(notesKey, JSON.stringify(userNotes));
+      displayNotes();
+    }
+
+    // Affichage des notes en bas
+    function displayNotes() {
+      const section = document.getElementById("notesSection");
+      section.innerHTML = '<h2>Mes notes de Street Food</h2>';
+      spots.forEach((spot, i) => {
+        const noteData = userNotes[i];
+        let mark = '';
+        if (noteData) {
+          let markClass = noteData.vu ? 'note-item note-vu' : 'note-item note-nonvu';
+          mark = `<div class="${markClass}">` +
+                (noteData.vu ? '👁️ ' : '🗺️ ') +
+                `<strong>${spot.name}</strong> &mdash; ` +
+                `<span>${noteData.text ? noteData.text : "<em>Aucune note</em>"}</span>` +
+                `<button style="margin-left:auto;" onclick="editNote(${i})">✏️</button>` +
+                '</div>';
+        } else {
+          mark = `<div class="note-item" style="background:#f5f5fb; border-left-color:#c9c9e6">` +
+                          `<strong>${spot.name}</strong> &mdash; <em>Aucune note</em> <button style="margin-left:auto;" onclick="editNote(${i})">Prendre une note</button></div>`;
+        }
+        section.innerHTML += mark;
+      });
+    }
+
+    // Interaction pour ajouter ou modifier une note
+    window.editNote = function(idx) {
+      const note = userNotes[idx] || {vu:false, text:""};
+      const s = spots[idx];
+      const txt = prompt(
+        `Notes pour ${s.name}\nSpécialité: ${s.special}\n\nCochez « vu » et entrez vos notes. (laisser vide pour effacer)\n\nActuel: ${note.text}`,
+        note.text
+      );
+      if (txt === null) return; // cancel
+      const wasSeen = confirm("Marquer ce lieu comme 'déjà visité' ?");
+      userNotes[idx] = { vu: wasSeen, text: txt.trim() };
+      if (!txt.trim()) userNotes[idx] = null;
+      saveNotes();
+    };
+
+    // Initialisation
+    displayNotes();
+  </script>
+</body>
+</html>
